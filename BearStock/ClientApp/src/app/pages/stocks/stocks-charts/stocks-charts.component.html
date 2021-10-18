@@ -1,0 +1,6 @@
+<app-stocks-charts-item
+  (removeEvent)="stockStoreService.removeStock($event.ticket)"
+  *ngFor="let chart of stockStoreService.stocks$ | async"
+  [stock]="chart">
+</app-stocks-charts-item>
+

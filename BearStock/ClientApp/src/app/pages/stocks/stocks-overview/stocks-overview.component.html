@@ -1,0 +1,23 @@
+<div>
+  <dx-accordion
+    #accordionComponent
+    [animationDuration]="300"
+    [collapsible]="true"
+    [dataSource]="components"
+    [multiple]="true"
+    [selectedItems]="[components[0], components[1]]">
+    <div *dxTemplate="let component of 'title'">
+      <p>{{component.title}}</p>
+    </div>
+    <div *dxTemplate="let component of 'item'">
+      <app-stocks-dashboards *ngIf="component.name === 'stocks-dashboards'"></app-stocks-dashboards>
+      <app-stocks-portfolio *ngIf="component.name === 'stocks-portfolio'"></app-stocks-portfolio>
+      <app-stocks-gain-loss *ngIf="component.name === 'stocks-gain-loss'"></app-stocks-gain-loss>
+      <app-stocks-positions *ngIf="component.name === 'stocks-positions'"></app-stocks-positions>
+    </div>
+  </dx-accordion>
+</div>
+
+
+
+

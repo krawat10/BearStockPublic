@@ -1,0 +1,24 @@
+<dx-pie-chart
+  [dataSource]="stockPositions"
+  id="piePerformanceChart"
+  palette="Soft Pastel"
+  type="doughnut">
+  <dxo-legend
+    horizontalAlignment="center"
+    verticalAlignment="bottom"></dxo-legend>
+  <dxi-series
+    argumentField="ticket"
+    valueField="total">
+    <dxo-small-values-grouping
+      [topCount]="3"
+      mode="topN"></dxo-small-values-grouping>
+    <dxo-label
+      [customizeText]="customizeLabel"
+      [visible]="true"
+      format="fixedPoint">
+      <dxo-connector
+        [visible]="true"
+        [width]="1"></dxo-connector>
+    </dxo-label>
+  </dxi-series>
+</dx-pie-chart>

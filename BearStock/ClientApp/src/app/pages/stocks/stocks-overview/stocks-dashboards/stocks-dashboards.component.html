@@ -1,0 +1,44 @@
+<div class="form">
+  <div class="dx-fieldset">
+    <div class="dx-field">
+      <div class="dx-field-label">Name</div>
+      <div class="dx-field-value">
+        <dx-select-box #selectBox (valueChange)="changeDashboard($event)" [items]="(dashboardStore.dashboards$ | async)"
+                       [value]="selectedDashboard" displayExpr="name"></dx-select-box>
+      </div>
+    </div>
+    <div *ngIf="state == stateType.Default" class="dashboard-row">
+      <dx-button (onClick)="state = stateType.NewDashboard" text="New" type="success"></dx-button>
+      <dx-button (onClick)="delete()" [disabled]="(dashboardStore.dashboards$ | async).length <= 1" text="Delete"
+                 type="danger"></dx-button>
+      <dx-button (onClick)="setAsDefault()" text="Default" type="default"></dx-button>
+      <dx-button (onClick)="update()" text="Update" type="warning"></dx-button>
+    </div>
+    <div *ngIf="state == stateType.NewDashboard" class="dx-field">
+      <div class="dx-field-label">Set Name</div>
+      <dx-validation-group #newDashboardValidation>
+        <div class="dx-field-value">
+          <dx-text-box #dashboardInput placeholder="eg. My ETFs" value="">
+            <dx-validator>
+              <dxi-validation-rule message="Name is required" type="required"></dxi-validation-rule>
+              <dxi-validation-rule [validationCallback]="isDuplicatedDashboardValidator" message="Dashboard exists"
+                                   type="custom"></dxi-validation-rule>
+            </dx-validator>
+            <dxi-button [options]="addButtonOption" location="after" name="add"></dxi-button>
+            <dxi-button [options]="backButtonOption" location="after" name="back"></dxi-button>
+          </dx-text-box>
+        </div>
+      </dx-validation-group>
+
+    </div>
+  </div>
+  <div class="dx-fieldset">
+    <div class="dx-fieldset-header">Charts</div>
+    <div class="dx-field">
+      <div class="dx-field-label">Ticker</div>
+      <dx-text-box #ticker class="dx-field-value input-adjusted" placeholder="eg. TSLA" value="">
+      </dx-text-box>
+      <dx-button (onClick)="addStock(ticker.value); ticker.value = '';" icon="plus" type="warning"></dx-button>
+    </div>
+  </div>
+</div>

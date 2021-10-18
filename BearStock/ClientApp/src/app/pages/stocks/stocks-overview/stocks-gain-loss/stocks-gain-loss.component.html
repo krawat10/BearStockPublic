@@ -1,0 +1,32 @@
+<dx-chart
+  [barGroupWidth]="18"
+  [dataSource]="stockPerformances"
+  [rotated]="true"
+  id="performanceChart">
+  <dxo-common-series-settings
+    argumentField="ticket"
+    type="stackedbar">
+  </dxo-common-series-settings>
+  <dxi-series
+    color="#d9534f"
+    name="Loss"
+    valueField="loss">
+  </dxi-series>
+  <dxi-series
+    color="#5cb85c"
+    name="Gain"
+    valueField="gain">
+  </dxi-series>
+  <dxo-tooltip
+    [customizeTooltip]="customizeTooltip"
+    [enabled]="true">
+  </dxo-tooltip>
+  <dxi-value-axis>
+    <dxo-label [customizeText]="customizeLabel"></dxo-label>
+  </dxi-value-axis>
+  <dxo-legend
+    horizontalAlignment="center"
+    verticalAlignment="bottom">
+    <dxo-margin [left]="50"></dxo-margin>
+  </dxo-legend>
+</dx-chart>

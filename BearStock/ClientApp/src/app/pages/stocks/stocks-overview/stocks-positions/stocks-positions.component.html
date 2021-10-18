@@ -1,0 +1,34 @@
+<dx-data-grid
+  (onEditCanceled)="logEvent('EditCanceled')"
+  (onEditCanceling)="logEvent('EditCanceling')"
+  (onEditingStart)="logEvent('EditingStart')"
+  (onInitNewRow)="logEvent('InitNewRow')"
+  (onRowInserted)="logEvent('RowInserted')"
+  (onRowInserting)="logEvent('RowInserting')"
+  (onRowRemoved)="logEvent('RowRemoved')"
+  (onRowRemoving)="logEvent('RowRemoving')"
+  (onRowUpdated)="logEvent('RowUpdated')"
+  (onRowUpdating)="logEvent('RowUpdating')"
+  (onSaved)="logEvent('Saved')"
+  (onSaving)="logEvent('Saving')"
+  [allowColumnReordering]="true"
+  [dataSource]="dataSource"
+  [showBorders]="true"
+  id="stocksPositionsContainer"
+  keyExpr="id">
+
+  <dxo-paging [enabled]="true"></dxo-paging>
+  <dxo-editing
+    [allowAdding]="true"
+    [allowDeleting]="true"
+    [allowUpdating]="true"
+    mode="row">
+  </dxo-editing>
+
+  <dxi-column caption="Ticket" dataField="ticket"></dxi-column>
+  <dxi-column caption="Price Per Share" dataField="pricePerShare" dataType="number"></dxi-column>
+  <dxi-column caption="Total Price" dataField="totalPrice" dataType="number"></dxi-column>
+  <dxi-column caption="Shares Amount" dataField="sharesAmount" dataType="number"></dxi-column>
+  <dxi-column caption="Date" dataField="date" dataType="date"></dxi-column>
+</dx-data-grid>
+

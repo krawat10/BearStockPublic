@@ -1,0 +1,16 @@
+﻿
+FROM mcr.microsoft.com/dotnet/aspnet:5.0 AS base
+WORKDIR /app
+EXPOSE 443
+
+FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
+WORKDIR /src
+RUN dotnet tool install --global dotnet-ef
+COPY ["BearStock.Authorization/BearStock.Authorization.csproj", "BearStock.Authorization/"]
+COPY ["BearStock.Authorization/entrypoint.sh", "BearStock.Authorization/"]
+RUN dotnet restore "BearStock.Authorization/BearStock.Authorization.csproj"
+COPY . .
+WORKDIR "/src/BearStock.Authorization"
+RUN dotnet build "BearStock.Authorization.csproj" -c Release -o /app/build
+RUN  chmod +x ./entrypoint.sh
+CMD /bin/bash ./entrypoint.sh

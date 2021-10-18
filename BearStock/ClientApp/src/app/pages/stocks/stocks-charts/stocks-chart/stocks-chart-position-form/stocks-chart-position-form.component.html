@@ -1,0 +1,33 @@
+<dx-popover
+  [(visible)]="isVisible"
+  [target]="target"
+  [width]="300"
+  position="top">
+  <div>
+    <dx-form (onFieldDataChanged)="onFormChange($event)"
+             [(formData)]="stockHistory"
+             [colCount]="1"
+             id="form">
+      <dxi-item [editorOptions]="{ }" dataField="pricePerShare" editorType="dxNumberBox">
+        <dxi-validation-rule message="Price price is required" type="required"></dxi-validation-rule>
+      </dxi-item>
+      <dxi-item [editorOptions]="{  }" dataField="sharesAmount" editorType="dxNumberBox">
+        <dxi-validation-rule message="Shares amount is required" type="required"></dxi-validation-rule>
+      </dxi-item>
+      <dxi-item [editorOptions]="{ }" dataField="totalPrice" editorType="dxNumberBox">
+        <dxi-validation-rule message="Total is required" type="required"></dxi-validation-rule>
+      </dxi-item>
+      <dxi-item [editorOptions]="{  }" dataField="date" editorType="dxDateBox">
+        <dxi-validation-rule message="Bought date is required" type="required"></dxi-validation-rule>
+      </dxi-item>
+
+    </dx-form>
+    <dx-button
+      (onClick)="save()"
+      class="save-btn"
+      icon="check"
+      text="Save"
+      type="success">
+    </dx-button>
+  </div>
+</dx-popover>

@@ -1,0 +1,50 @@
+version: '3.4'
+
+services:
+  bearstock.api.yfinance:
+    ports:
+      - "440:5000"
+
+  bearstock.dashboard:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - AppSettings__AuthorizationUrl=bearstock.authorization/Users/authenticate
+      - ConnectionStrings__DataContext=Server=bearstock.dashboard.db;Database=DataContext;User=sa;Password=Your_password123;
+    ports:
+      - "441:443"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+
+  bearstock.dashboard.db:
+    environment:
+      - SA_PASSWORD=Your_password123
+      - ACCEPT_EULA=Y
+
+  bearstock.authorization:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - ConnectionStrings__DataContext=Server=bearstock.authorization.db;Database=DataContext;User=sa;Password=Your_password123;
+    ports:
+      - "444:443"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+
+  bearstock.authorization.db:
+     environment:
+      - SA_PASSWORD=Your_password123
+      - ACCEPT_EULA=Y
+
+  bearstock.web:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+    ports:
+      - "443:443"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+   

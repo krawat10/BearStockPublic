@@ -1,0 +1,18 @@
+<section class="main">
+  <dx-box direction="row" width="100%">
+    <dxi-item [ratio]="1">
+      <div class="card">
+        <section class="left-side">
+          <app-stocks-overview></app-stocks-overview>
+        </section>
+      </div>
+    </dxi-item>
+    <dxi-item [ratio]="3">
+      <dx-scroll-view class="card">
+        <section class="right-side">
+          <app-stocks-charts></app-stocks-charts>
+        </section>
+      </dx-scroll-view>
+    </dxi-item>
+  </dx-box>
+</section>

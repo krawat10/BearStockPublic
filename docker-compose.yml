@@ -1,0 +1,114 @@
+version: "3.4"
+
+services:
+  bearstock.web:
+   image: krawat10/bearstockweb
+   build:
+     context: .
+     dockerfile: BearStock/Dockerfile   
+   environment:
+     - ASPNETCORE_ENVIRONMENT=Production
+
+  # bearstock.api.yfinance:
+  #   image: krawat10/bearstockapiyfinance
+  #   build:
+  #     context: .
+  #     dockerfile: BearStock.Api.YFinance/Dockerfile
+
+  bearstock.dashboard:
+    image: krawat10/bearstockdashboard
+    build:
+      context: .
+      dockerfile: BearStock.Dashboard/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - ASPNETCORE_AuthSettings__AuthorizationUrl=http://bearstock.authorization/authentication
+      - ConnectionStrings__DataContext=Server=bearstock.dashboard.db,1433;Database=DataContext;User=sa;Password=Your_password123;
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+    depends_on: 
+      - bearstock.dashboard.migration
+
+  bearstock.financialmodelingprep:
+    image: krawat10/financialmodelingprep
+    build:
+      context: .
+      dockerfile: BearStock.FinancialModelingPrep/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - ASPNETCORE_AuthSettings__AuthorizationUrl=http://bearstock.authorization/authentication
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+
+  bearstock.dashboard.migration:
+    image: krawat10/bearstockdashboardmigration
+    build:
+      context: .
+      dockerfile: BearStock.Dashboard/Dockerfile.Migration
+    environment:
+      - ConnectionStrings__DataContext=Server=bearstock.dashboard.db;Database=DataContext;User=sa;Password=Your_password123;
+    depends_on:
+      - bearstock.dashboard.db
+
+  bearstock.dashboard.db:
+    image: "mcr.microsoft.com/mssql/server"
+    volumes:
+      - dashboard_sqlvolume:/var/opt/mssql
+    environment:
+      - SA_PASSWORD=Your_password123
+      - ACCEPT_EULA=Y
+
+  bearstock.authorization:
+    image: krawat10/bearstockauthorization
+    build:
+      context: .
+      dockerfile: BearStock.Authorization/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DataContext=Server=bearstock.authorization.db;Database=DataContext;User=sa;Password=Your_password123;
+      - ClientTokenSettings__Authority=http://bearstock.authorization/authentication
+      - ClientTokenSettings__ClientId=ro.client
+      - ClientTokenSettings__ClientSecret=secret
+      - ClientTokenSettings__Scope=SampleApp.API offline_access
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+    depends_on: 
+      - bearstock.authorization.migration
+
+  bearstock.authorization.migration:
+    image: krawat10/bearstockauthorizationmigration
+    build:
+      context: .
+      dockerfile: BearStock.Authorization/Dockerfile.Migration
+    environment:
+      - ConnectionStrings__DataContext=Server=bearstock.authorization.db;Database=DataContext;User=sa;Password=Your_password123;
+    depends_on:
+      - bearstock.authorization.db
+
+  bearstock.authorization.db:
+    image: "mcr.microsoft.com/mssql/server"
+    volumes:
+      - authorization_sqlvolume:/var/opt/mssql
+    environment:
+      - SA_PASSWORD=Your_password123
+      - ACCEPT_EULA=Y
+
+  bearstock.proxy:
+    image: krawat10/bearstockproxy
+    container_name: bearstock.proxy
+    build: 
+      context: .
+      dockerfile: BearStock.Proxy/Dockerfile.development
+    ports:
+      - 443:443
+    depends_on: 
+      - bearstock.authorization
+  
+volumes:
+  authorization_sqlvolume:  
+  dashboard_sqlvolume:  
+    
+  
+

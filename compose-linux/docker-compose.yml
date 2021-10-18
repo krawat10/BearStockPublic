@@ -1,0 +1,36 @@
+version: "3.4"
+
+services:
+  bearstock.api.yfinance:
+    image: krawat10/bearstockapiyfinance
+    build:
+      context: .
+      dockerfile: BearStock.Api.YFinance/Dockerfile
+
+  bearstock.dashboard:
+    image: krawat10/bearstockdashboard
+    build:
+      context: .
+      dockerfile: BearStock.Dashboard/Dockerfile
+    depends_on: 
+      - bearstock.dashboard.db
+    
+  bearstock.dashboard.db:
+    image: "mcr.microsoft.com/mssql/server"
+    
+  bearstock.authorization:
+    image: krawat10/bearstockauthorization
+    build:
+      context: .
+      dockerfile: BearStock.Authorization/Dockerfile
+    depends_on: 
+      - bearstock.authorization.db
+
+  bearstock.authorization.db:
+    image: "mcr.microsoft.com/mssql/server"
+
+  bearstock.web:
+    image: krawat10/bearstockweb
+    build:
+      context: .
+      dockerfile: BearStock/Dockerfile   
